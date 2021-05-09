@@ -1,4 +1,5 @@
 # Starve_Free_Reader_writer_problem
+You can find the complete design detail below.
 ## Starve Free Soltuion
 The classical solution of the problem results in starvation of either reader or writer. In this solution,I have tried to propose a starve free solution.  While proposing the solution only one assumptionis made i.e.  Semaphore preserves the first in first out(FIFO) order when locking and releasing theprocesses( Semaphore uses a FIFO queue to maintain the list of blocked processes)
 ### Semaphore
