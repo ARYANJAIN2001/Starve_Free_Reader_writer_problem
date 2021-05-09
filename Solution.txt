@@ -1,9 +1,9 @@
 // INTIALIZATION
-read_count = Integer(0);     //Integer representing the number of reader executing critical section
-turn = Seamaphore(1);        //seamphore representing the order in which the writer and 
-                             //reader are requesting access to critical section
-rwt = Seamaphore(1);         //seamphore required to access the critical section
-r_mutex = Seamaphore(1);     //seamphore required to change the read_count variable
+read_count = Integer(0);    //Integer representing the number of reader executing critical section
+turn = Semaphore(1);        //seamphore representing the order in which the writer and 
+                            //reader are requesting access to critical section
+rwt = Semaphore(1);         //seamphore required to access the critical section
+r_mutex = Semaphore(1);     //seamphore required to change the read_count variable
 
 
 
