@@ -2,10 +2,10 @@
 ### Semaphore
 ```cpp
 // The code for a FIFO semaphore.
-typedef struct{
+struct Semaphore{
   int value = 1;
   FIFO_Queue* Q = new FIFO_Queue();
-}Semaphore;
+}
     
 void wait(Semaphore *S,int* process_id){
   S->value--;
@@ -109,7 +109,7 @@ do{
       wait(turn,process_id);              //waiting for its turn to get executed
       wait(rwt,process_id);               //requesting  access to the critical section
       signal(turn,process_id);            //releasing turn so that the next reader or writer can take the token
-                                          and can be serviced
+                                          //and can be serviced
 /* CRITICAL SECTION */
 
 /* EXIT SECTION */
