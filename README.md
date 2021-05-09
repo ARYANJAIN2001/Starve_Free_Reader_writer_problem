@@ -2,7 +2,7 @@
 ### Semaphore
 ```cpp
 // The code for a FIFO semaphore.
-typedef Struct{
+typedef struct{
   int value = 1;
   FIFO_Queue* Q = new FIFO_Queue();
 }Semaphore;
@@ -63,9 +63,59 @@ struct FIFO_Queue{
 }
 
 // A Process Block.
-Struct ProcessBlock
+struct ProcessBlock
 {
     ProcessBlock* next;
     int* process_block;
 }
+```
+### Intialization
+```cpp
+int read_count = 0;                      //Integer representing the number of reader executing critical section
+Semaphore turn = new Semaphore();        //seamphore representing the order in which the writer and 
+                                         //reader are requesting access to critical section
+Semaphore rwt = new Semaphore();         //seamphore required to access the critical section
+Semaphore r_mutex = new Semaphore();     //seamphore required to change the read_count variable
+```
+### Reader's Code
+```cpp
+do{
+/* ENTRY SECTION */
+       wait(turn,process_id);              //waiting for its turn to get executed
+       wait(r_mutex,process_id);           //requesting access to change read_count
+       read_count++;                       //update the number of readers trying to access critical section 
+       if(read_count==1)                   // if I am the first reader then request access to critical section
+         wait(rwt);                        //requesting  access to the critical section for readers
+       signal(turn);                       //releasing turn so that the next reader or writer can take the token
+                                             and can be serviced
+       signal(r_mutex);                    //release access to the read_count
+/* CRITICAL SECTION */
+       
+/* EXIT SECTION */
+       wait(r_mutex,process_id)            //requesting access to change read_count         
+       read_count--;                       //a reader has finished executing critical section so read_count decrease by 1
+       if(read_count==0)                   //if all the reader have finished executing their critical section
+        signal(rwt);                       //releasing access to critical section for next reader or writer
+       signal(r_mutex);                    //release access to the read_count  
+       
+/* REMAINDER SECTION */
+       
+}while(true);
+```
+### Writer's code
+```cpp
+do{
+/* ENTRY SECTION */
+      wait(turn,process_id);              //waiting for its turn to get executed
+      wait(rwt,process_id);               //requesting  access to the critical section
+      signal(turn,process_id);            //releasing turn so that the next reader or writer can take the token
+                                          and can be serviced
+/* CRITICAL SECTION */
+
+/* EXIT SECTION */
+      signal(rwt)                         //releasing access to critical section for next reader or writer
+
+/* REMAINDER SECTION */
+
+}while(true);
 ```
