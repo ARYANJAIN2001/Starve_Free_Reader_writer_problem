@@ -2,76 +2,70 @@
 ### Semaphore
 ```cpp
 // The code for a FIFO semaphore.
-struct Semaphore
-{
-    int value = 1;
-    Queue* Q = new Queue();
+typedef Struct{
+  int value = 1;
+  FIFO_Queue* Q = new FIFO_Queue();
+}Semaphore;
     
-    void wait(int process_id)
-    {
-        value--;
-        if(value < 0)
-        {
-            Q->push(process_id);
-            block(); //this function will block the proccess until it's woken up.
-            // I have used non-busy waiting but busy waiting is also possible 
-            // in case of block() and wakeup() equivalents being not callable or available in the language.
-        }
-    }
+void wait(Semaphore *S,int* process_id){
+  S->value--;
+  if(S->value < 0){
+  S->Q->push(process_id);
+  block(); //this function will block the process by using system call and will transfer it to the waiting queue
+           //the process will remain in the waiting queue till it is waken up by the wakeup() system calls
+           //this is a type of non busy waiting
+  }
+}
     
-    void signal()
-    {
-        value++;
-        if(value <= 0)
-        {
-            int pid = Q->pop();
-            wakeup(pid); //this function will wakeup the process with the given pid.
-        }
-    }
+void signal(Semaphore *S){
+  S->value++;
+  if(S->value <= 0){
+  int* PID = S->Q->pop();
+  wakeup(PID); //this function will wakeup the process with the given pid using system calls
+  }
 }
 
+
 //The code for the queue which will allow us to make a FIFO semaphore.
-struct Queue
-{
-    Node* Front, Rear;
-   	void push(int val)
+struct FIFO_Queue{
+    ProcessBlock* front, rear;
+    int* pop()
     {
-        Node* n = new Node();
-        n->value = val;
-        if(Rear != NULL)
+        if(front == NULL)
         {
-            Rear->next = n;
-            Rear = n;
+            return -1;            // Error : underflow.
         }
         else
         {
-            Front = Rear = n;
-        }
-    }
-    
-    int pop()
-    {
-        if(Front == NULL)
-        {
-            return -1; // Error : underflow.
-        }
-        else
-        {
-            int val = Front->value;
-            Front = Front->next;
-            if(Front == NULL)
+            int* val = front->value;
+            front = front->next;
+            if(front == NULL)
             {
-                Rear = NULL;
+                rear = NULL;
             }
             return val;
         }
     }
+    void* push(int* val){
+        ProcessBlock* blk = new ProcessBlock();
+        blk->value = val;
+        if(rear == NULL){
+            front = rear = n;
+            
+        }
+        else
+        {
+            rear->next = blk;
+            rear = blk;
+        }
+    }
+    
 }
 
-// A queue node.
-Struct Node
+// A Process Block.
+Struct ProcessBlock
 {
-    Node* next;
-    int value;
+    ProcessBlock* next;
+    int* process_block;
 }
 ```
