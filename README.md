@@ -127,4 +127,4 @@ Before accessing the critical section any reader or writer have to first acquire
 The code is structured so that there are no chances for deadlock and also the readers and writers takes a finite amount of time to pass through the critical section and also at the end of each reader writer code they release the semaphore for other processes to enter into critical section.
 ## References
 - Abraham Silberschatz, Peter B. Galvin, Greg Gagne - Operating System Concepts
-- [Wikipedia].(https://en.wikipedia.org/wiki/Readers%E2%80%93writers_problem)
+- [Wikipedia](https://en.wikipedia.org/wiki/Readers%E2%80%93writers_problem)
