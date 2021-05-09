@@ -87,7 +87,7 @@ do{
        if(read_count==1)                   // if I am the first reader then request access to critical section
          wait(rwt);                        //requesting  access to the critical section for readers
        signal(turn);                       //releasing turn so that the next reader or writer can take the token
-                                             and can be serviced
+                                           //and can be serviced
        signal(r_mutex);                    //release access to the read_count
 /* CRITICAL SECTION */
        
